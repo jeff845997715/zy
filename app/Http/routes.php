@@ -18,8 +18,25 @@ Route::get('/', function () {
 //
 //Route::resource('article','ArticlesController');
 
+// 管理后台登陆
+Route::get('/admin/login', ['as' => 'admin.login', function () {
+    return view('admin.login');
+}]);
+
 Route::group(['prefix' => 'admin'], function () {
+
+    // 登陆
+    Route::post('/admin/login', 'Admin\AdminController@login', function (){
+    });
+
+    // 退出
+    Route::get('/admin/logout', 'Admin\AdminController@logout');
+});
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
+    
     Route::resource('/users','Admin\UsersController');
     Route::resource('/post','Admin\PostController');
     Route::resource('/product','Admin\ProductController');
 });
+
