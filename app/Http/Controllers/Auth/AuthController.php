@@ -23,6 +23,12 @@ class AuthController extends Controller
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
+    // post认证失败后的跳转路径
+    protected $loginPath = '/login';
+    
+    // 登陆成功之后跳转地址
+    protected $redirectPath = '/index';
+    
     /**
      * Create a new authentication controller instance.
      *
@@ -44,6 +50,7 @@ class AuthController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
+            'phone' => 'required|min:11|max:11|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
     }
@@ -59,6 +66,7 @@ class AuthController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone' => $data['phone'],
             'password' => bcrypt($data['password']),
         ]);
     }

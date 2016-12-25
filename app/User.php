@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Session;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -42,4 +43,14 @@ class User extends Model implements AuthenticatableContract,
         $this->attributes['password'] = md5($password);
     }
     
+    public static function guest(){
+        $id = Session::get('id', 0);
+        $res = User::where(['id'=>$id])->first();
+    
+        if ($res['id']) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
